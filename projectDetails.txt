@@ -1,0 +1,26 @@
+pages/index.js:
+-display general posts (separate from user created posts)
+
+
+pages/profile/[pid].js
+-show user's page containing their posts
+
+
+pages/posts/index.js
+-list of posts
+
+pages/posts/[postId]/index.js
+-post details
+
+
+pages/notifications/index.js
+-list of notifications (friend user posted/liked/commented)
+
+pages/messages/index.js
+-messages by friends
+
+pages/friends/index.js
+-list of friends
+
+pages/friends/[fid].js
+-friend profile details
