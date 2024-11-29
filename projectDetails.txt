@@ -1,12 +1,12 @@
-pages/index.js:
+pages/index.js: ---ssr
 -display general posts (separate from user created posts)
 
 
-pages/profile/[pid].js
+pages/profile/[pid].js   ---csr
 -show user's page containing their posts
 
 
-pages/posts/index.js
+pages/posts/index.js   ---
 -list of posts
 
 pages/posts/[postId]/index.js
@@ -19,8 +19,13 @@ pages/notifications/index.js
 pages/messages/index.js
 -messages by friends
 
-pages/friends/index.js
+pages/friends/index.js --csr
 -list of friends
 
 pages/friends/[fid].js
 -friend profile details
+
+
+APIs:
+/api/likes/[uid]----for notifications
+/api/likes/[postid]---to display with posts
