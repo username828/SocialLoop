@@ -15,7 +15,8 @@ export default function PostList({ list }) {
                         postId={post._id} 
                         title={post.title} 
                         content={post.content} 
-                        author={post.authorId} 
+                        image={post.image}
+                        // author={post.authorId} 
                         date={new Date(post.date).toLocaleDateString()} 
                     />
                 ))}

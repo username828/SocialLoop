@@ -8,11 +8,9 @@ export default function Form(){
 
     const e=useRef();
     const p=useRef();
+    const n=useRef();
+
     const r=useRouter()
-
-
-
-
 
     const [isLogin,setIsLogin]=useState(true)
 
@@ -24,6 +22,7 @@ export default function Form(){
         event.preventDefault();
         const email=e.current.value;
         const password=p.current.value;
+        const name=n.current.value
 
         if(isLogin){
             const res=await signIn('credentials',{redirect:false, email:email,password:password})
@@ -33,6 +32,9 @@ export default function Form(){
                 if(session){
                     r.push(`/profile/${session.user.id}`)
                 }
+                else{
+                    r.push('/auth')
+                }
             })
 
         }
@@ -40,14 +42,15 @@ export default function Form(){
         else{
             const res=await fetch('/api/auth/signup',{
                 method:"POST",
-                body:JSON.stringify({email,password}),
+                body:JSON.stringify({email,password,name}),
                 headers:{
                     'Content-Type':'application/json'
                 }
             })
-
-            const data=await res.json()
-        }
+        //     if(res.ok){
+        //         r.push(`/profile/${session.user.id}`)
+        //     }
+        // }
     }
     return(
         <div className={styles.auth}>
@@ -63,6 +66,13 @@ export default function Form(){
                     <label htmlFor='password'>Password:</label>
                     <input type='password' id='password' required ref={p}/>
                 </div>
+
+                
+                    <div className={styles.control}>
+                        <label htmlFor='name'>Name:</label>
+                        <input type='name' id='name' required ref={n}/>
+                    </div>
+                
 
                 <div className={styles.actions}>
                     <button>{isLogin ? 'Login' : 'Create Account'}</button>

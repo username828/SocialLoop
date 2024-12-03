@@ -5,12 +5,13 @@ import bcrypt from "bcrypt"
 
 
 export default NextAuth({
-
+    session:{jwt:true},
     providers:[
         CredentialsProvider({
             name:"credentials",
             
             credentials:{
+                name:{},
                 email:{},
                 password:{},
 

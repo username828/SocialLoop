@@ -21,6 +21,9 @@ export default function Header(){
         <nav className={styles.navigation}>
             <ul>
                 <li>
+                    <Link href='/explore'>Explore</Link>    
+                </li>
+                <li>
                     {!session &&
                         <Link href='/auth'>Login</Link>
                     }

@@ -5,7 +5,7 @@
     align-items: baseline;
     padding: 1rem 10%;
     height: 5rem;
-    background-color: #202020;
+    background-color: green;
   }
   
   .logo {
@@ -60,12 +60,12 @@
   }
   
   .header a:hover {
-    color: #c291e2;
+    color: lightgreen;
   }
   
   .header button:hover {
-    background-color: #c291e2;
-    color: #38015c;
+    background-color: lightgreen;
+    color: darkgreen;
   }
   
   @media (min-width: 768px) {

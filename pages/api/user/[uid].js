@@ -1,50 +1,68 @@
 import getDB from "@/util/mongodb";
-import { MongoClient, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
+import { getSession } from "next-auth/react";
 
-//for getting user's profile page (including their posts)
 export default async function handler(req, res) {
+  const db = await getDB();
   const { uid } = req.query;
-  const db = await getDB()
 
-  
-  if (req.method === "POST") {
-    // try {
-    //   const { username, email } = req.body;
-    //   const result = await db.collection("users").insertOne({ username, email });
-
-    //   client.close();
-    //   return res.status(201).json({ message: "User created", userId: result.insertedId });
-    // } catch (error) {
-    //   client.close();
-    //   return res.status(500).json({ message: "Failed to create user", error });
-    // }
+  if (!ObjectId.isValid(uid)) {
+    return res.status(400).json({ message: "Invalid user ID" });
   }
 
   if (req.method === "GET") {
-    
-      // Convert `uid` to ObjectId
-      const user = await db.collection("users").findOne({ _id: new ObjectId(uid) });
+    try {
+      const users = await db
+        .collection("users")
+        .find({ _id: { $ne: new ObjectId(uid) } })
+        .toArray();
 
-      if (!user) {
-        client.close();
-        return res.status(404).json({ message: "User not found" });
+      const following = await db
+        .collection("following")
+        .find({ followerId: uid })
+        .toArray();
+
+      const followedIds = following.map((f) => f.followedId.toString());
+
+      const userList = users.map((user) => ({
+        ...user,
+        isFollowing: followedIds.includes(user._id.toString()),
+      }));
+
+      return res.status(200).json(userList);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      return res.status(500).json({ message: "Failed to fetch users" });
+    }
+  }
+
+  if (req.method === "POST") {
+    try {
+      const { followedId } = req.body;
+
+      if (!ObjectId.isValid(followedId)) {
+        return res.status(400).json({ message: "Invalid followed ID" });
       }
 
-      return res.status(200).json(user)
+      const existingFollow = await db
+        .collection("following")
+        .findOne({ followerId: uid, followedId });
 
-    // // Fetch user's posts
-    //     const posts = await db.collection("posts").find({ authorId: uid }).toArray();
-    //     console.log(posts)
-    //     // Combine user and posts
-    //     const profile = { ...user, posts };
-     
-    //     res.status(200).json(profile);
-
-    //   client.close();
-    //   return res.status(200).json(user);
-    // } catch (error) {
-    //   client.close();
-    //   return res.status(500).json({ message: "Failed to fetch user", error });
-    // }
+      if (existingFollow) {
+        // Unfollow
+        await db.collection("following").deleteOne({ _id: existingFollow._id });
+        return res.status(200).json({ success: true, message: "Unfollowed successfully" });
+      } else {
+        // Follow
+        await db.collection("following").insertOne({
+          followerId: uid,
+          followedId,
+        });
+        return res.status(201).json({ success: true, message: "Followed successfully" });
+      }
+    } catch (error) {
+      console.error("Error updating follow status:", error);
+      return res.status(500).json({ message: "Failed to update follow status" });
+    }
   }
 }

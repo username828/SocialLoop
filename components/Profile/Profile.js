@@ -1,45 +1,64 @@
 import { useState } from "react";
 import Button from "../ui/Button";
-import Friend from "../Friends/Friend";
+import { useRouter } from "next/router";
+import NewPost from "../Posts/NewPost";
+import styles from "./Profile.module.css"; // Import the stylesheet
 
 export default function Profile(props) {
-    console.log(props.pid)
-    const followerId = props.pid;
-    console.log(followerId)
-    // const [clicked, setClicked] = useState(false);
-    // const [following, setFollowing] = useState([]);  // State to store following data
+  const router = useRouter();
+    //const id=router.query.id
+  const navigateToPosts = () => {
+    router.push(`/myposts`);
+  };
 
-    // const handleFollowing = async () => {
-    //     if (!followerId) {
-    //         alert("Please log in to follow users.");
-    //         return;
-    //     }
-        
-    //     // Make the fetch request to get the following data
-    //     const res = await fetch(`http://localhost:3000/api/followers/${followerId}`);
-    //     const data = await res.json(); // returns following array
-        
-    //     // Update state with the following data
-    //     setFollowing(data.following);
-    //     setClicked(true); // Set clicked to true to display following list
-    // };
+  const navigateToFeed = () => {
+    router.push(`/feed`);
+  };
 
-    return (
-        <>
-            <h2>{props.name}</h2>
-            <h3>{props.bio}</h3>
-            
-            {/* <Button lnk="/posts">View My Posts</Button>
-            <Button onClick={handleFollowing} lnk="/friends">View Following</Button> */}
 
-            {/* {clicked && following.length > 0 && (
-                <div>
-                    <h3>Following List:</h3>
-                    {following.map(friend => (
-                        <Friend key={friend._id} friend={friend} />
-                    ))}
-                </div>
-            )} */}
-        </>
-    );
+  const navigateToFollowing= () => {
+    router.push(`/users`);
+  };
+
+
+  const [newPost, setNewPost] = useState(false);
+  const toggleNewPost = () => {
+    setNewPost((prevState) => !prevState);
+  };
+
+  return (
+    <div className={styles.profileContainer}>
+
+      <h2 className={styles.profileTitle}>Welcome {props.name}</h2>
+
+      <div className={styles.cardContainer}>
+        <div className={styles.card}>
+          <Button className={styles.cardButton} onClick={navigateToPosts}>
+            View My Posts
+          </Button>
+        </div>
+
+        <div className={styles.card}>
+          <Button className={styles.cardButton} onClick={navigateToFeed}>
+            View My Feed
+          </Button>
+        </div>
+
+        <div className={styles.card}>
+          <Button className={styles.cardButton} onClick={navigateToFollowing}>
+            View Following
+          </Button>
+        </div>
+
+        <div className={styles.card}>
+          <Button className={styles.cardButton} onClick={toggleNewPost}>
+            {newPost ? "Cancel" : "Create Post"}
+          </Button>
+        </div>
+      </div>
+
+      {newPost && <NewPost pid={props.pid} />}
+
+    </div>
+  );
 }

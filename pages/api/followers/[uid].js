@@ -9,6 +9,7 @@ export default async function handler(req,res) {
         
         const db=await getDB()
 
+
         const following=await db.collection('following').find({followerId:uid}).toArray()
         console.log(following)
         if(following){

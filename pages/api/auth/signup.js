@@ -5,6 +5,7 @@ export default async function handler(req,res){
 
         const data=req.body
         const email=data.email
+        const name=data.name
 
         const password=data.password
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -12,6 +13,7 @@ export default async function handler(req,res){
         const db=await getDB();
 
         await db.collection("users").insertOne({
+            name: name,
             email: email,
             password: hashedPassword,
         });

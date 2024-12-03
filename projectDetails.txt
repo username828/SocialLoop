@@ -1,31 +1,46 @@
-pages/index.js: ---ssr
--display general posts (separate from user created posts)
+redirect after sign up
+fix if no posts (view my posts)
+like adding but button not toggling
+post creation error
+
+likes page
+----------------
+
+pages/index.js:
+-displaying all posts currently
+-general posts api displaying all posts
 
 
-pages/profile/[pid].js   ---csr
--show user's page containing their posts
+pages/profile/[pid].js
+-show user's profile page---navigate to users(Followers),feed,myposts
+-api profile/[pid]-fetching user info 
+-api /posts/[pid]--for adding posts
 
 
-pages/posts/index.js   ---
--list of posts
+
+pages/myposts/index.js   
+-list of user's posts
+--api posts/userId
+
 
 pages/posts/[postId]/index.js
--post details
+-post details of user's posts
+--api postDetails/postId join necessary fields
 
 
-pages/notifications/index.js
--list of notifications (friend user posted/liked/commented)
 
-pages/messages/index.js
--messages by friends
+---DANIYAL-----
+pages/feed.js
+--list of posts of people logged in user is following
+--components using apis for feed, adding comments, issues displaying (author unknown) 
+--check like button on feed (working or not should toggle unlike/like)---improve UI---display total likes if possible
 
-pages/friends/index.js --csr
--list of friends
+//api/feed/[uid],likes,comments
 
-pages/friends/[fid].js
--friend profile details
+----------------
+pages/users/index.js 
+-list of users and if following or not
 
 
-APIs:
-/api/likes/[uid]----for notifications
-/api/likes/[postid]---to display with posts
+
+

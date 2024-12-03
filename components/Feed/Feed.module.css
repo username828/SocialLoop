@@ -1,0 +1,10 @@
+/* Define a local class for the h1 */
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  /* Additional styles for the feed can go here */
+  
