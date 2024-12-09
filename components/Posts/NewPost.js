@@ -4,12 +4,12 @@ import styles from "./NewPost.module.css";
 export default function NewPost(props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [image, setImage] = useState(null); // Add state for the image file
+  const [image, setImage] = useState(null);
 
   const authorId = props.pid;
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]); // Set the selected file
+    setImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -20,7 +20,7 @@ export default function NewPost(props) {
     formData.append("content", content);
     formData.append("authorId", authorId);
     if (image) {
-      formData.append("file", image); // Append the image file to the form data
+      formData.append("file", image);
     }
 
     const response = await fetch(`/api/posts/${props.pid}`, {
@@ -30,13 +30,11 @@ export default function NewPost(props) {
 
     const data = await response.json();
 
-    if (response.ok) {
+    if (data) {
       alert("Post created successfully!");
       setTitle("");
       setContent("");
       setImage(null);
-    } else {
-      alert("Error creating post: " + data.error);
     }
   };
 

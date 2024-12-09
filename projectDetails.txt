@@ -1,4 +1,4 @@
-redirect after sign up
+redirect after sign up-----redirected to home
 fix if no posts (view my posts)
 like adding but button not toggling
 post creation error

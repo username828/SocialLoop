@@ -47,10 +47,15 @@ export default function Form(){
                     'Content-Type':'application/json'
                 }
             })
-        //     if(res.ok){
-        //         r.push(`/profile/${session.user.id}`)
-        //     }
-        // }
+
+            if(res.status===201){
+
+                r.push('/')
+            }
+            // if(res.ok){
+            //     r.push(`/profile/${session.user.id}`)
+            // }
+        }
     }
     return(
         <div className={styles.auth}>

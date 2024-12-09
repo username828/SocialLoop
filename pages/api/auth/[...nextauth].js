@@ -10,12 +10,12 @@ export default NextAuth({
         CredentialsProvider({
             name:"credentials",
             
-            credentials:{
-                name:{},
-                email:{},
-                password:{},
+            // credentials:{
+            //     name:{},
+            //     email:{},
+            //     password:{},
 
-            },
+            // },
 
             async authorize(credentials){
         
@@ -32,7 +32,6 @@ export default NextAuth({
                     throw new Error("Invalid credentials");
                 }
 
-                // // Return user object (omit password)
                 // const { password: _, ...userWithoutPassword } = user;
                 // return userWithoutPassword;
 
@@ -48,7 +47,7 @@ export default NextAuth({
     callbacks: {
         async jwt({ token, user }) {
           if (user) {
-            token.id = user.id;  // Attach the user ID to the token
+            token.id = user.id; 
           }
           return token;
         },
@@ -59,9 +58,9 @@ export default NextAuth({
         }
     },
 
-    session:{
-        strategy:"jwt"
-    }
+    // session:{
+    //     strategy:"jwt"
+    // }
       
 
 

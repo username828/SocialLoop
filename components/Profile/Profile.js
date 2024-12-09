@@ -5,33 +5,13 @@ import NewPost from "../Posts/NewPost";
 import styles from "./Profile.module.css"; // Import the stylesheet
 
 export default function Profile(props) {
-  const router = useRouter();
-    //const id=router.query.id
-  const navigateToPosts = () => {
-    router.push(`/myposts`);
-  };
-
-  const navigateToFeed = () => {
-    router.push(`/feed`);
-  };
-
-
-  const navigateToFollowing= () => {
-    router.push(`/users`);
-  };
-
-
-  const [newPost, setNewPost] = useState(false);
-  const toggleNewPost = () => {
-    setNewPost((prevState) => !prevState);
-  };
 
   return (
-    <div className={styles.profileContainer}>
+    <div>
 
       <h2 className={styles.profileTitle}>Welcome {props.name}</h2>
 
-      <div className={styles.cardContainer}>
+      {/* <div className={styles.cardContainer}>
         <div className={styles.card}>
           <Button className={styles.cardButton} onClick={navigateToPosts}>
             View My Posts
@@ -57,7 +37,7 @@ export default function Profile(props) {
         </div>
       </div>
 
-      {newPost && <NewPost pid={props.pid} />}
+      {newPost && <NewPost pid={props.pid} />} */}
 
     </div>
   );

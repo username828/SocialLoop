@@ -1,6 +1,6 @@
 import styles from './PostDetails.module.css'
 import Image from "next/image";
-export default function PostDetails({ title, content, author,image, date, likes, count }){
+export default function PostDetails({ title, content, author,image, date, count }){
     console.log("Count ",count)
     return(
 

@@ -1,4 +1,3 @@
-
 import PostDetails from "@/components/Posts/PostDetails";
 import PostsSearch from "@/components/Posts/PostSearch";
 export default function ExplorePage({ posts }) {
@@ -19,25 +18,22 @@ export default function ExplorePage({ posts }) {
   );
 }
 
-// This function fetches the data at build time and enables ISR for the page
 export async function getStaticProps() {
-  try {
-    // Fetch posts from your API or database
-    const res = await fetch('http://localhost:3000/api/general-posts');
-    const posts = await res.json();
+  const res = await fetch('http://localhost:3000/api/general-posts');
+  const posts = await res.json();
 
-    // Return the fetched posts as props to the page
+  if(!posts){
     return {
-      props: {
-        posts,
-      },
-      // This will regenerate the page after 60 seconds
-      revalidate: 60, // Revalidate every 60 seconds
-    };
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    return {
-      notFound: true, // In case there’s an error fetching posts
+      notFound: true, 
     };
   }
+  return {
+    props: {
+      posts,
+    },
+    revalidate: 60, 
+  };
+  
+
+  
 }

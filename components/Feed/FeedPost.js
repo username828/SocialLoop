@@ -1,17 +1,21 @@
-import { useState, useRef } from 'react';
-import { useSession } from 'next-auth/react'; // Import useSession
-import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import { usePosts } from '@/store/PostContext';
 import Comment from './Comment';
 import styles from './FeedPost.module.css';
-
+import Button from '../ui/Button';
+import { useRef } from 'react';
 const FeedPost = ({ post }) => {
   const { data: session } = useSession();
-  const [isLiked, setIsLiked] = useState(post.liked);
-  const [likes, setLikes] = useState(post.likes);
-  const [comments, setComments] = useState(post.comments);
-
-
+  const { toggleLike, addCommentToPost } = usePosts();
   const commentInputRef = useRef(null);
+
+  const handleLikePost = async () => {
+    if (!session) {
+      alert("You need to log in to like posts.");
+      return;
+    }
+    toggleLike(post._id, session.user.id, post.liked);
+  };
 
   const handleAddComment = async (event) => {
     event.preventDefault();
@@ -25,49 +29,22 @@ const FeedPost = ({ post }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           postId: post._id,
-          userId: session.user.id, 
+          userId: session.user.id,
           content: newComment,
         }),
       });
 
       const data = await response.json();
       if (response.ok) {
-        setComments((prevComments) => [...prevComments, data.comment]);
-        commentInputRef.current.value = ''; 
+        addCommentToPost(post._id, data.comment);
+        commentInputRef.current.value = '';
       } else {
         alert(data.message);
       }
     } catch (error) {
-      console.error('Error adding comment:', error);
+      console.error("Error adding comment:", error);
     }
   };
-
-  const handleLikePost = async () => {
-    try {
-      const response = await fetch('/api/feed/likes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          postId: post._id,
-          userId: session.user.id,
-        }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        setIsLiked(data.liked);
-        setLikes(data.likes);
-      } else {
-        alert(data.message);
-      }
-    } catch (error) {
-      console.error('Error liking/unliking post:', error);
-    }
-  };
-
-  if (!session) {
-    return <p>Please log in to comment or like posts.</p>; // Show a message if not logged in
-  }
 
   return (
     <div className={styles.card}>
@@ -77,30 +54,16 @@ const FeedPost = ({ post }) => {
       </div>
       <p>{post.content}</p>
 
-      <div className={styles.imageContainer}>
-        <Image
-          src={post.image}
-          alt={post.title}
-          width={400}
-          height={300}
-          layout="responsive"
-
-        />
-      </div>
-
       <div className={styles.actions}>
-        <button onClick={handleLikePost}>
-          {isLiked ? 'Unlike' : 'Like'} 
-        </button>
+        <Button onClick={handleLikePost}>
+          {post.liked ? `Unlike` : `Like`}
+        </Button>
       </div>
 
       <div className={styles.comments}>
         <h3>Comments</h3>
-
-        {comments.length ? (
-          comments.map((comment) => (
-            <Comment comment={comment} />
-          ))
+        {post.comments.length ? (
+          post.comments.map((comment) => <Comment key={comment._id} comment={comment} />)
         ) : (
           <p>No comments yet.</p>
         )}

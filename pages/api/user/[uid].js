@@ -6,15 +6,10 @@ export default async function handler(req, res) {
   const db = await getDB();
   const { uid } = req.query;
 
-  if (!ObjectId.isValid(uid)) {
-    return res.status(400).json({ message: "Invalid user ID" });
-  }
-
   if (req.method === "GET") {
-    try {
       const users = await db
         .collection("users")
-        .find({ _id: { $ne: new ObjectId(uid) } })
+        .find({ _id: { $ne: new ObjectId(uid) } })//except logged in user's id
         .toArray();
 
       const following = await db
@@ -30,30 +25,20 @@ export default async function handler(req, res) {
       }));
 
       return res.status(200).json(userList);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      return res.status(500).json({ message: "Failed to fetch users" });
-    }
+
   }
 
   if (req.method === "POST") {
     try {
       const { followedId } = req.body;
-
-      if (!ObjectId.isValid(followedId)) {
-        return res.status(400).json({ message: "Invalid followed ID" });
-      }
-
       const existingFollow = await db
         .collection("following")
         .findOne({ followerId: uid, followedId });
 
       if (existingFollow) {
-        // Unfollow
         await db.collection("following").deleteOne({ _id: existingFollow._id });
         return res.status(200).json({ success: true, message: "Unfollowed successfully" });
       } else {
-        // Follow
         await db.collection("following").insertOne({
           followerId: uid,
           followedId,

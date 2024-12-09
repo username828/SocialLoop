@@ -48,10 +48,7 @@ export default async function handler(req, res) {
 
         const result = await db.collection("posts").insertOne(newPost);
 
-        return res.status(201).json({
-          message: "Post created successfully",
-          post: result.ops[0], // created post returned
-        });
+        return res.status(201).json({message: "Post created successfully"});
       } catch (error) {
         return res.status(500).json({ message: "Internal Server Error", error });
       }

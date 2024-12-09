@@ -1,18 +1,11 @@
 import { getSession } from "next-auth/react";
 import { ObjectId } from "mongodb";
 import getDB from "@/util/mongodb";
+import getAuthorName from "@/util/helper";
 
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
 
-  const session = await getSession({ req });
-  if (!session) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  const userId = session.user.id; // Get the logged-in user's ID
+  const {userId} = req.query;
   const db = await getDB();
 
   try {
@@ -24,8 +17,17 @@ export default async function handler(req, res) {
 
     // Fetch posts matching the liked post IDs
     const likedPosts = await db.collection("posts").find({ _id: { $in: postIds } }).toArray();
+    const UpdatedPosts = [];
 
-    res.status(200).json(likedPosts);
+    for (const post of likedPosts){
+      const author=await db.collection('users').findOne({_id:new ObjectId(post.authorId)})
+      UpdatedPosts.push({
+        ...post,
+        authorName:author?author.name : null
+      })
+    }
+
+    res.status(200).json(UpdatedPosts);
   } catch (error) {
     console.error("Error fetching liked posts:", error);
     res.status(500).json({ message: "Internal server error" });

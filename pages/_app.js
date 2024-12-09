@@ -3,6 +3,7 @@ import { UserProvider } from "@/store/UserContext";
 import "@/styles/globals.css";
 import Head from "next/head";
 import {SessionProvider} from "next-auth/react"
+import { PostsProvider } from "@/store/PostContext";
 export default function App({ Component, pageProps }) {
   return (
 
@@ -13,7 +14,10 @@ export default function App({ Component, pageProps }) {
     </Head>
 
     <UserProvider>
-      <Component {...pageProps} />
+      <PostsProvider>
+        <Component {...pageProps} />
+      </PostsProvider>
+
     </UserProvider> 
   </Layout>
   </SessionProvider>

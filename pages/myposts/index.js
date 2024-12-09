@@ -66,20 +66,17 @@ export default function PostsPage() {
     }
 
     const fetchPosts = async () => {
-      try {
+
         const userId = session.user.id;
         const res = await fetch(`/api/posts/${userId}`);
         const data = await res.json();
         setPosts(data);
-      } catch (error) {
-        console.error("Failed to fetch posts:", error);
-      } finally {
         setLoading(false);
-      }
+
     };
 
     fetchPosts();
-  }, [session, status, router]);
+  }, []);
 
   if (status === "loading" || loading) {
     return <p>Loading...</p>;

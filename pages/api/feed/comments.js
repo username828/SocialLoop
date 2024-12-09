@@ -42,6 +42,7 @@
 
 
 import getDB from "@/util/mongodb";
+import { ObjectId } from "mongodb";
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -62,14 +63,18 @@ export default async function handler(req, res) {
         createdAt: new Date(),
       });
 
-      // Return the full comment with the inserted ID
+
+      const user=await db.collection('users').findOne({_id:new ObjectId(userId)})
+      const authorName=user.name;
       const newComment = {
-        _id: result.insertedId.toString(), // Convert ObjectId to string
+        _id: result.insertedId.toString(), 
         postId,
         authorId: userId,
+        authorName,
         content,
         createdAt: new Date(),
       };
+
 
       return res.status(201).json({ comment: newComment });    
     } catch (error) {

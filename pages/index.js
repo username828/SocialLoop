@@ -23,7 +23,7 @@ export default function Home(props) {
       {
         props.posts.map(post=>{
           
-          return <PostDetails key={post._id} title={post.title} author={post.authorName} content={post.content} image={post.image} date={post.date}/>
+          return <PostDetails key={post._id} title={post.title} author={post.authorName} content={post.content} image={post.image} date={post.date} count={post.likeCount}/>
   
         })
       }
@@ -33,13 +33,12 @@ export default function Home(props) {
 }
 
 export async function getServerSideProps() {
-  const res = await fetch("http://localhost:3000/api/general-posts")
-  //console.log(res)
+  const res = await fetch("http://localhost:3000/api/mostliked")
   const posts=await res.json() 
-  //console.log(posts)
+  console.log(posts)
   return{
     props:{
-      posts,
+      posts
     }
   }
 }

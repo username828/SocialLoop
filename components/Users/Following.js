@@ -125,7 +125,6 @@ export default function UsersList() {
     }
 
     const fetchUserData = async () => {
-      try {
         const res = await fetch(`/api/user/${session.user.id}`);
         if (!res.ok) {
           console.error("Failed to fetch users:", res.statusText);
@@ -135,15 +134,13 @@ export default function UsersList() {
 
         const data = await res.json();
         setUsers(data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      } finally {
+
         setLoading(false);
-      }
+      
     };
 
     fetchUserData();
-  }, [session, status, router]);
+  }, []);
 
   const handleFollow = async (followedId) => {
     if (!session) {
@@ -164,7 +161,7 @@ export default function UsersList() {
 
       if (data.success) {
         // Updating follow status
-        setUsers((prev) =>prev.map((user) =>user._id === followedId? { ...user, isFollowing: !user.isFollowing }: user));
+        setUsers(prev=>prev.map(user=>user._id === followedId ? { ...user, isFollowing: !user.isFollowing }: user));
       } else {
         console.error("Failed to update follow status:", data.message);
       }

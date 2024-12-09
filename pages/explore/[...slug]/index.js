@@ -4,8 +4,6 @@ import { useState , useEffect} from "react";
 import PostList from "@/components/Posts/PostList";
 
  function FilteredPostsPage(props) {
-
-  //client side rendering code
   const [posts,setPostsState]=useState();
   const r=useRouter();
   const paramData=r.query.slug;
@@ -34,9 +32,11 @@ import PostList from "@/components/Posts/PostList";
   const month=Number(paramData[1]);
 
   const filteredPosts=posts.filter((post) => {
-  const postDate = new Date(post.date);
-      return postDate.getFullYear() === year && postDate.getMonth() === month - 1;
-    });
+    const postDate = new Date(post.date);
+    return postDate.getFullYear() === year && postDate.getMonth() === month - 1;
+  });
+
+  
   if(isNaN(year)|| isNaN(month) || error)
       {
         return <p>Invalid year or month</p>

@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     const db = await getDB();
 
 
-            // Fetch all posts
+             // Fetch all posts
             const generalPosts = await db.collection('posts').find().toArray();
             
             const UpdatedPosts = [];
